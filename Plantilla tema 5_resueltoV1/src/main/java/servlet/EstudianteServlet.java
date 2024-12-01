@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.DAOFactory;
+import entidades.Estudiante;
 import entidades.TipoDocumento;
 import interfaces.EstudianteInterface;
 
@@ -27,6 +28,8 @@ public class EstudianteServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String type=request.getParameter("type");
 		
+		System.out.println("este es la variable tipo : "+type);
+		
 		switch(type) {
 			case "load":configuracionInicial(request,response);
 			default:
@@ -40,9 +43,14 @@ public class EstudianteServlet extends HttpServlet {
 		
 		DAOFactory daoFactory = DAOFactory.getDaoFactory(DAOFactory.MYSQL);
 		EstudianteInterface dao=daoFactory.getEstudiante();
-		List<TipoDocumento> data=dao.listTipoDocumentos();
+		List<TipoDocumento> dataTipoDocumento=dao.listTipoDocumentos();
+		System.out.println("antes data estudiante");
+		List<Estudiante> dataEstudiante=dao.listEstudiante();
 		
-		request.setAttribute("dataTipoDocumento", data);
+		System.out.println("despues data estudiante");
+		
+		request.setAttribute("dataEstudiantes", dataEstudiante);
+		request.setAttribute("data", dataTipoDocumento);
 		request.getRequestDispatcher("listEstudiante.jsp").forward(request, response);
 	}
 

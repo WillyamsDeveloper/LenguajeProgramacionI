@@ -55,7 +55,43 @@ public class EstudianteModel implements EstudianteInterface {
 	@Override
 	public List<Estudiante> listEstudiante() {
 		// TODO Auto-generated method stub
-		return null;
+		
+		List<Estudiante> listEstudiantes = new ArrayList<Estudiante>();
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		try {
+			cn = MySqlConexion.getConexion();
+			String sql= "SELECT est.idEstudiante,est.tipoDocumento, est.nombresApellidos, tipo.documento, est.documento as 'numeroDocumento', est.telefono, est.carrera "
+					+ "FROM estudiante as est INNER JOIN tipoDocumento as tipo "
+					+ "on est.tipoDocumento = tipo.idTipo";
+			pstm = cn.prepareStatement(sql);
+			rs = pstm.executeQuery();
+			while (rs.next()) {
+				Estudiante estudiante = new Estudiante();
+				estudiante.setId(rs.getString("idEstudiante"));
+				estudiante.setNombresApellidos(rs.getString("nombresApellidos"));
+				estudiante.setTipoDocumento(rs.getString("tipoDocumento"));
+				estudiante.setDocumento(rs.getString("documento"));
+				estudiante.setNumeroDocumento(rs.getString("numeroDocumento"));
+				estudiante.setTelefono(rs.getString("telefono"));
+				estudiante.setCarrera(rs.getString("carrera"));
+				listEstudiantes.add(estudiante);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstm != null) pstm.close();
+				if (cn != null) cn.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		return listEstudiantes;
 	}
 
 }

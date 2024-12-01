@@ -1,3 +1,4 @@
+<%@page import="entidades.Estudiante"%>
 <%@page import="entidades.TipoDocumento"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -20,12 +21,12 @@
 	<div class="col-6">
 		<h3>Registrar Estudiantes</h3>
 		<%
-			List<TipoDocumento> listDocumentos= (List<TipoDocumento>) request.getAttribute("dataTipoDocumento");
+			List<TipoDocumento> listDocumentos= (List<TipoDocumento>) request.getAttribute("data");
 		%>
 
 	<form action="EstudianteServlet2" method="post">
 		<input type="hidden" name="type" value="register">
-		<input type="hidden" name="idEstudiante" value="">">
+		<input type="hidden" name="idEstudiante" value="">
 		
 		<div class="form-group">
 		<label class="text-secondary">Nombres y Apellidos</label>
@@ -35,7 +36,13 @@
 		<div class="form-group">
 			<label class="text-secondary">Documento</label>
 			<select class="form-control" name="cboTipoDocumento">
-
+			<%
+				if (listDocumentos != null){
+					for (TipoDocumento item: listDocumentos){%>
+						<option value="<%=item.getId()%>"><%=item.getDocumento() %></option>
+				<%	}
+				}
+			%>
 			</select>
 			<br>
 			<input class="form-control" type="text" name="txtNumeroDocumento"
@@ -70,21 +77,31 @@
 		</thead>
 	
 	<tbody>
-	<tr>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td>
-		<a href="">
-			<img alt="" src="img/ic_info.png" width="20" height="20" title="Editar">
-		</a>
-		<a href="">
-			<img alt="" src="img/ic_delete.png" width="20" height="20" title="Eliminar">
-		</a>
-		</td>
-	</tr>
+	<%
+		List<Estudiante> listEstudiante = (List<Estudiante>) request.getAttribute("dataEstudiantes");
+		
+		if(listEstudiante !=null){
+			for(Estudiante item: listEstudiante){ %>
+				<tr>
+					<td><%=item.getId()%></td>
+					<td><%=item.getNombresApellidos()%></td>
+					<td><%=item.getDocumento()%></td>
+					<td><%=item.getNumeroDocumento()%></td>
+					<td><%=item.getCarrera()%></td>
+					<td>
+					<a href="">
+						<img alt="" src="img/ic_info.png" width="20" height="20" title="Editar">
+					</a>
+					<a href="">
+						<img alt="" src="img/ic_delete.png" width="20" height="20" title="Eliminar">
+					</a>
+					</td>
+				</tr>
+			<%}
+		}
+	%>
+	
+	
 	</tbody>
 	</table>
 	</div>		
